@@ -18,7 +18,7 @@ func TestElasticsearch(t *testing.T) {
 		Started: true,
 
 		ContainerRequest: testcontainers.ContainerRequest{
-			Image: "docker.elastic.co/elasticsearch/elasticsearch:8.15.1",
+			Image: "docker.elastic.co/elasticsearch/elasticsearch:9.1.2",
 			Env: map[string]string{
 				"ES_JAVA_OPTS":           "-Xms1g -Xmx1g",
 				"discovery.type":         "single-node",

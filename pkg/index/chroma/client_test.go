@@ -18,9 +18,9 @@ func TestChroma(t *testing.T) {
 		Started: true,
 
 		ContainerRequest: testcontainers.ContainerRequest{
-			Image:        "ghcr.io/chroma-core/chroma:0.5.5",
+			Image:        "ghcr.io/chroma-core/chroma:1.0.17",
 			ExposedPorts: []string{"8000/tcp"},
-			WaitingFor:   wait.ForLog("Application startup complete"),
+			WaitingFor:   wait.ForExposedPort(),
 		},
 	})
 

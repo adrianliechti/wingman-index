@@ -18,10 +18,12 @@ func TestWeaviate(t *testing.T) {
 		Started: true,
 
 		ContainerRequest: testcontainers.ContainerRequest{
-			Image: "cr.weaviate.io/semitechnologies/weaviate:1.26.4",
+			Image: "cr.weaviate.io/semitechnologies/weaviate:1.32.3",
 			Env: map[string]string{
 				"CLUSTER_HOSTNAME":          "node1",
 				"DEFAULT_VECTORIZER_MODULE": "none",
+
+				"AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED": "true",
 			},
 			ExposedPorts: []string{"8080/tcp"},
 			WaitingFor:   wait.ForLog("node reporting ready"),
