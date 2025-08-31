@@ -26,6 +26,17 @@ func main() {
 		panic(err)
 	}
 
+	// Read indexing interval from env var, default to 5 minutes
+	intervalStr := os.Getenv("INDEX_INTERVAL")
+	if intervalStr == "" {
+		intervalStr = "5m"
+	}
+	interval, err := time.ParseDuration(intervalStr)
+	if err != nil {
+		log.Printf("Invalid INDEX_INTERVAL, using default 5m: %v", err)
+		interval = 5 * time.Minute
+	}
+
 	indexer, err := indexer.New(cfg)
 
 	if err != nil {
@@ -38,7 +49,7 @@ func main() {
 				log.Printf("Error indexing directory: %v\n", err)
 			}
 
-			time.Sleep(5 * time.Minute)
+			time.Sleep(interval)
 		}
 	}()
 
