@@ -14,10 +14,14 @@ import (
 func main() {
 	ctx := context.Background()
 
-	root, err := os.Getwd()
-
-	if err != nil {
-		panic(err)
+	// Read index directory from env var, default to current working directory
+	root := os.Getenv("INDEXDIR")
+	if root == "" {
+		var err error
+		root, err = os.Getwd()
+		if err != nil {
+			panic(err)
+		}
 	}
 
 	cfg, err := config.FromEnvironment()
