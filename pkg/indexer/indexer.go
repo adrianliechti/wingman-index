@@ -11,18 +11,13 @@ import (
 	"io/fs"
 	"os"
 	"path/filepath"
+	"regexp"
 	"slices"
 	"strings"
 	"time"
 
 	"github.com/adrianliechti/wingman-index/pkg/config"
 	"github.com/adrianliechti/wingman-index/pkg/index"
-	"github.com/adrianliechti/wingman-index/pkg/index/azure"
-	"github.com/adrianliechti/wingman-index/pkg/index/chroma"
-	"github.com/adrianliechti/wingman-index/pkg/index/elasticsearch"
-	"github.com/adrianliechti/wingman-index/pkg/index/memory"
-	"github.com/adrianliechti/wingman-index/pkg/index/qdrant"
-	"github.com/adrianliechti/wingman-index/pkg/index/weaviate"
 	"github.com/adrianliechti/wingman-index/pkg/to"
 	"github.com/adrianliechti/wingman/pkg/client"
 )
@@ -103,6 +98,13 @@ func (idx *Indexer) IndexDir(ctx context.Context, root string) error {
 		name := filepath.Base(path)
 		title := strings.TrimSuffix(name, filepath.Ext(name))
 		revision := md5_text
+
+		// Extract title from markdown files
+		if strings.ToLower(filepath.Ext(path)) == ".md" {
+			if mdTitle := extractMarkdownTitle(data); mdTitle != "" {
+				title = mdTitle
+			}
+		}
 
 		metadata := Metadata{
 			Name: filepath.Base(path),
@@ -377,15 +379,19 @@ func writeJSON(dir, name string, v any) error {
 	return writeData(dir, name, data)
 }
 
-func indexFromEnv() {
-	var url string
-	var namespace string
-	var token string
+func extractMarkdownTitle(data []byte) string {
+	content := string(data)
+	lines := strings.Split(content, "\n")
 
-	azure.New(url, namespace, token)
-	chroma.New(url, namespace)
-	elasticsearch.New(url, namespace)
-	memory.New()
-	qdrant.New(url, namespace)
-	weaviate.New(url, namespace)
+	// Look for the first heading (# Title)
+	re := regexp.MustCompile(`^#+\s+(.+)$`)
+
+	for _, line := range lines {
+		line = strings.TrimSpace(line)
+		if matches := re.FindStringSubmatch(line); len(matches) > 1 {
+			return strings.TrimSpace(matches[1])
+		}
+	}
+
+	return ""
 }

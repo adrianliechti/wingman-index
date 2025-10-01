@@ -5,6 +5,7 @@ go 1.25.0
 require (
 	github.com/adrianliechti/wingman v0.0.0-20250815113704-c534253d8d1b
 	github.com/google/uuid v1.6.0
+	github.com/modelcontextprotocol/go-sdk v0.2.0
 	github.com/stretchr/testify v1.10.0
 	github.com/testcontainers/testcontainers-go v0.38.0
 )
@@ -73,7 +74,6 @@ require (
 	github.com/moby/sys/user v0.4.0 // indirect
 	github.com/moby/sys/userns v0.1.0 // indirect
 	github.com/moby/term v0.5.2 // indirect
-	github.com/modelcontextprotocol/go-sdk v0.2.0 // indirect
 	github.com/morikuni/aec v1.0.0 // indirect
 	github.com/openai/openai-go v1.12.0 // indirect
 	github.com/opencontainers/go-digest v1.0.0 // indirect
